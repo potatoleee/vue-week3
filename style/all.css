@@ -1,0 +1,26 @@
+.h-100vh {
+  height: 100vh;
+}
+
+img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  max-width: 100%;
+  display: block;
+}
+
+.primary-image {
+  height: 300px;
+}
+
+.images {
+  height: 150px;
+}
+
+.mult-images {
+  width: 50%;
+}
+
+.mult-images img {
+  height: 150px;
+}/*# sourceMappingURL=all.css.map */
