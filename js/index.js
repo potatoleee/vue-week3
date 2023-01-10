@@ -19,7 +19,7 @@ const app = {
                 return
             }else{
                 // #1 發送登入 api ，並儲存Token
-            axios.post(`${url}/admin/signin`, this.user)
+            axios.post(`${api_url}/admin/signin`, this.user)
             .then(res => {
                 // console.log(res.data);
                 // 一般寫法

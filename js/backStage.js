@@ -1,38 +1,26 @@
+let editProductModal = '';
+let deleteProductModal = '';
+
+// var myModal = new bootstrap.Modal(editProductModal);//實體化
 const { createApp } = Vue;
+
 const app = {
     data() {
         return {
             //產品資料
             products:[],
-            addProductData:{
-                "data": {
-                    "title": "[賣]動物園造型衣服3",
-                    "category": "衣服2",
-                    "origin_price": 100,
-                    "price": 300,
-                    "unit": "個",
-                    "description": "Sit down please 名設計師設計",
-                    "content": "這是內容",
-                    "is_enabled": 1,
-                    "imageUrl": "主圖網址",
-                    "imagesUrl": [
-                      "圖片網址一",
-                      "圖片網址二",
-                      "圖片網址三",
-                      "圖片網址四",
-                      "圖片網址五"
-                    ]
-                  }
-            },
+            isNew : false,
             tempData:{
                 "imagesUrl":[]
-            }
+            },
+            uploadImages : ""
+            
         }
     },
     methods: {
         //取得產品列表
         getProductList() {
-            axios.get(`${url}/api/${path}/admin/products`)
+            axios.get(`${api_url}/api/${api_path}/admin/products`)
                 .then(res => {
                     this.products = res.data.products;
                     console.log(this.products);
@@ -50,46 +38,89 @@ const app = {
             // console.log(token);
             axios.defaults.headers.common['Authorization'] = token;
         },
-        //新增產品
-        addProduct() {
-            axios.post(`${url}/api/${path}/admin/product`,data)
+        //確認開啟的modal類別
+        openModal(state, product) {
+            if(state === 'new'  ){
+                this.tempData = {
+                    "imagesUrl":[]
+                };
+                editProductModal.show();
+                this.isNew = true;
+            }else if(state === 'edit'){
+                editProductModal.show();
+                this.tempData = {...product};
+                this.isNew = false;
+            } else if (state === 'delete'){
+                deleteProductModal.show();
+                this.tempData = {...product};
+                this.isNew = false;
+            }
+        },
+        //確認按鈕
+        confirm() {
+            //初始為新增
+            let http = 'post';
+            let url = `${api_url}/api/${api_path}/admin/product`;
+            
+            //判斷為編輯
+            if( this.isNew === false ){
+                http = 'put';
+                url = `${api_url}/api/${api_path}/admin/product/${this.tempData.id}`;
+            }
+             axios[http](url,{data:this.tempData})//這邊格式比較特別本來，要對照文件給的格式放入data
                 .then(res => {
                     console.log(res.data);
-                })
-                .catch(error => {
-                    console.log(error.response.data);
-                })
-        },
-        //編輯產品
-        editProduct(product) {
-            console.log(product);
-            this.tempData = {...product};
-        },
-        //確認編輯
-        confirmEdit() {
-            this.products.forEach( (editProduct,id) => {
-                if(editProduct.id === this.tempData.id){
-                    this.products[id] = this.tempData;
-                    console.log(this.tempData);
-                }
-            });
-             axios.put(`${url}/api/${path}/admin/product/${this.tempData.id}`,{data:this.tempData})//這邊格式比較特別本來，要對照文件給的格式放入data
-                .then(res => {
-                    console.log(res.data);
-                    
+                    editProductModal.hide();
+                    this.getProductList();
                 })
                 .catch(error => {
                     console.log(error.response.data);
                 })
             
         },
-        //上傳圖片
+        //新增圖片
         uploadImage() {
             this.tempData.imagesUrl = [];
             this.tempData.imagesUrl.push('');
+        },
+        //刪除單一產品
+        deleteProduct() {
+            axios.delete(`${api_url}/api/${api_path}/admin/product/${this.tempData.id}`)
+                .then(res => {
+                    console.log(res.data);
+                    deleteProductModal.hide();
+                    this.getProductList();
+                })
+                .catch(error => {
+                    console.log(error.response.data);
+                })
+        },
+        //上傳圖片API
+        upload(event) {
+        
+            // #1 撰寫上傳的 API 事件
+            console.dir(event.target);
+            const file = event.target.files[0];
+        
+            const formData = new FormData();
+            formData.append('file-to-upload', file)
+        
+            axios.post(`${api_url}/api/${api_path}/admin/upload`,formData)
+              .then((res) => {
+                console.log(res);
+                console.log("上傳圖片網址", res.data.imageUrl);
+                this.uploadImages = res.data.imageUrl;
+                alert("圖片上傳成功")
+              })
+              .catch((err) => {
+                console.log(err.response.data.message);
+              })
+        
         }
     },
     mounted() {
+        editProductModal = new bootstrap.Modal(document.querySelector("#editProductModal"));
+        deleteProductModal = new bootstrap.Modal(document.querySelector("#deleteProductModal"));
         this.checkLogin();
         this.getProductList();
         
