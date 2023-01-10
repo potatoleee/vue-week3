@@ -97,11 +97,15 @@ const app = {
         },
         //上傳圖片API
         upload(event) {
-        
-            // #1 撰寫上傳的 API 事件
-            console.dir(event.target);
+            // 取得上傳的檔案
             const file = event.target.files[0];
-        
+            
+            /* 限制檔案上傳型別 */
+            let suffixName = file.name.substring(file.name.lastIndexOf('.') + 1);   /* 得到檔案字尾名 */
+            if (suffixName !== 'jpg' && suffixName !== 'JPG' && suffixName !== 'png') {
+                alert("上傳檔案只能是 jpg、png 格式!，請重新上傳");
+                return;
+            }
             const formData = new FormData();
             formData.append('file-to-upload', file)
         

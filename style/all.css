@@ -23,4 +23,8 @@ img {
 
 .mult-images img {
   height: 150px;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }/*# sourceMappingURL=all.css.map */

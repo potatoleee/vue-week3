@@ -9,26 +9,24 @@
     <title>WEEK3 後台管理 BackStage</title>
 </head>
 <body>
-    <h1>backstage</h1>
+    
     <div id="app">
-      <div class="container">
-        <h2>圖片上傳</h2>
+      <div class="container mt-4">
+        <h1 class="text-center"> 後台 | Backstage</h1>
+        <h2>圖片上傳區</h2>
+        <label for="file" class="mb-2">圖片檔案僅接受 jpg、png 格式，感謝配合～</label>
         <input
           type="file"
-          class="form-control"
+          class="form-control mb-2"
           id="file"
           placeholder="請輸入圖片連結"
           @change="upload"
-        />    
-      </div>
-      <div class="container">
-        <a :href="uploadImages" @prevent target="_blank">上傳的圖片連結</a>
-        <p>
+        />   
+        <a :href="uploadImages"  target="_blank">上傳的圖片連結</a>
+        <div class="pre-wrap">
           {{uploadImages}}
-        </p>
-        
+        </div> 
       </div>
-      
         <div class="container">
           <div class="text-end mt-4">
             <button type="button" class="btn btn-primary " @click="openModal('new', product)">
