@@ -25,6 +25,6 @@ img {
   height: 150px;
 }
 
-.pre-wrap {
-  white-space: pre-wrap;
+.break-word {
+  word-break: break-word;
 }/*# sourceMappingURL=all.css.map */
