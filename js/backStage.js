@@ -9,7 +9,7 @@ const app = {
         return {
             //產品資料
             products:[],
-            isNew : false,
+            isNew : false,//判斷是否為新增or編輯
             tempData:{
                 "imagesUrl":[]
             },
@@ -79,8 +79,8 @@ const app = {
             
         },
         //新增圖片
-        uploadImage() {
-            this.tempData.imagesUrl = [];
+        createImage() {
+            this.tempData.imagesUrl = []; //新增input欄位放入網址
             this.tempData.imagesUrl.push('');
         },
         //刪除單一產品
@@ -90,6 +90,7 @@ const app = {
                     console.log(res.data);
                     deleteProductModal.hide();
                     this.getProductList();
+                    alert("刪除成功");
                 })
                 .catch(error => {
                     console.log(error.response.data);
@@ -101,9 +102,9 @@ const app = {
             const file = event.target.files[0];
             
             /* 限制檔案上傳型別 */
-            let suffixName = file.name.substring(file.name.lastIndexOf('.') + 1);   /* 得到檔案字尾名 */
-            if (suffixName !== 'jpg' && suffixName !== 'JPG' && suffixName !== 'png') {
-                alert("上傳檔案只能是 jpg、png 格式!，請重新上傳");
+            let fileType = file.name.substring(file.name.lastIndexOf('.') + 1);   /* 得到檔案字尾名 */
+            if (fileType !== 'jpg' && fileType !== 'JPG' && fileType !== 'png') {
+                alert("上傳檔案只能是 jpg、png 格式!，請注意格式上傳呦");
                 return;
             }
             const formData = new FormData();
@@ -114,17 +115,17 @@ const app = {
                 console.log(res);
                 console.log("上傳圖片網址", res.data.imageUrl);
                 this.uploadImages = res.data.imageUrl;
-                alert("圖片上傳成功")
+                alert("圖片上傳成功");
               })
               .catch((err) => {
-                console.log(err.response.data.message);
+                alert(err.response.data.message);
               })
         
         }
     },
     mounted() {
-        editProductModal = new bootstrap.Modal(document.querySelector("#editProductModal"));
-        deleteProductModal = new bootstrap.Modal(document.querySelector("#deleteProductModal"));
+        editProductModal = new bootstrap.Modal(document.querySelector("#editProductModal")); //實體化
+        deleteProductModal = new bootstrap.Modal(document.querySelector("#deleteProductModal"));//實體化
         this.checkLogin();
         this.getProductList();
         

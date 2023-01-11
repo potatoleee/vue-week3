@@ -80,7 +80,7 @@
          
         </div>
         
-        <!-- 編輯 Modal start-->
+        <!-- 新增or編輯 Modal start-->
         <div id="editProductModal" ref="editProductModal" class="modal fade " tabindex="-1" aria-labelledby="editProductModalLabel"
              aria-hidden="true">
           <div class="modal-dialog modal-xl " >
@@ -104,7 +104,7 @@
                     <!-- 主要圖片 end-->
                     <!-- 次要圖片 start -->
                     <h3 class="mb-3">次要圖片</h3>
-                    <!-- 判斷傳入的值是否為一個Array -->
+                    <!-- 判斷是否已經有建立 次要照片 陣列-->
                     <div v-if="Array.isArray(tempData.imagesUrl)">
                         <div class="mb-1" v-for="(image, key) in tempData.imagesUrl" :key="key"  >
                             <div class="mb-3">
@@ -113,10 +113,10 @@
                             </div>
                             <img class="img-fluid" :src="image" alt="">
                         </div>
-                        
-                        <div v-if="!tempData.imagesUrl.length || tempData.imagesUrl[tempData.imagesUrl.length - 1]">
+                        <!-- 前面判斷陣列為空的時後 後面 tempData.imagesUrl[tempData.imagesUrl.length - 1] 的原因是因為當長度1時 會得到 tempData.imagesUrl[0] 再來長度為2時 tempData.imagesUrl[1]第二筆-->
+                        <div v-if=" tempData.imagesUrl.length==0 || tempData.imagesUrl[tempData.imagesUrl.length - 1]">
                           <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempData.imagesUrl.push('')">
-                          新增圖片
+                          新增圖片2
                           </button>
                         </div>
                         <div v-else>
@@ -124,13 +124,13 @@
                             刪除圖片
                           </button>
                         </div>
-                      </div>
-
-                      <div v-else>
-                        <button class="btn btn-outline-primary btn-sm d-block w-100" @click="uploadImage">
-                          新增圖片
+                    </div>
+                    <!-- 當判斷 tempData.imagesUrl 不存在時開啟 可能新建產品時就沒有新增次要照片-->
+                    <div v-else>
+                        <button class="btn btn-outline-primary btn-sm d-block w-100" @click="createImage">
+                          新增圖片1
                           </button>
-                      </div>
+                    </div>
                     <!-- 次要圖片 end -->
                   </div>
                   <div class="col-sm-8">
@@ -197,7 +197,7 @@
             </div>
           </div>
         </div>
-        <!-- 編輯 Modal end-->
+        <!-- 新增or編輯 Modal end-->
 
         <!-- 刪除 Modal start-->
         <div id="deleteProductModal" ref="deleteProductModal" class="modal fade " tabindex="-1"
