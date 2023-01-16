@@ -32,7 +32,6 @@ const app = {
                 // document.cookie = "someCookieName=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
                 document.cookie = `week2HexToken=${token}; expires=${ new Date (expired) };`;
                 //這邊也都要this.才可以取到
-                this.checkLogin();
                 //跳轉至後台頁面
                 location.href = "backStage.html";
             })
@@ -41,28 +40,6 @@ const app = {
             })
             }
         },
-        //驗證是否登入
-        checkLogin(){
-            // #2 取得 Token (Token 僅需設定一次)
-            // var myCookie = document.cookie.replace(/(?:(?:^|.*;\s*)test2\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            const token = document.cookie.replace(/(?:(?:^|.*;\s*)week2HexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            axios.defaults.headers.common['Authorization'] = token;
-
-            // 確認是否登入 api
-            // axios.post(`${url}/api/user/check`)
-            //     .then(res => {
-            //         console.log(res.data)
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response.data);
-                   
-            //     })
-            
-        },
-    },
-     //生命週期，元件開始的時候，執行以下這段
-    mounted() {
-        
     },
 }
 createApp(app).mount("#app")

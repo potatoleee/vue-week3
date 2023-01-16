@@ -18,25 +18,28 @@ const app = {
         }
     },
     methods: {
+        //登入驗證
+        checkAdmin() {
+            axios.post(`${api_url}/api/user/check`)
+                .then(res => {
+                    //使用此api後驗證後再取得資料
+                    this.getProductList();
+                })
+                .catch(error => {
+                    alert("請先登入帳號密碼喔～不要偷懶(ゝ∀･)b 感謝你！")
+                    location.href = "index.html";
+                })
+        },
         //取得產品列表
         getProductList() {
             axios.get(`${api_url}/api/${api_path}/admin/products`)
                 .then(res => {
                     this.products = res.data.products;
-                    console.log(this.products);
+                    
                 })
                 .catch(error => {
-                    console.log(error.response.data);
-                    alert("請先登入帳號密碼喔～不要偷懶(ゝ∀･)b 感謝你！")
-                    location.href = "index.html";
+                    alert(error.response.data.message);
                 })
-        },
-        //取得 Token (Token 僅需設定一次)
-        checkLogin() {
-            // var myCookie = document.cookie.replace(/(?:(?:^|.*;\s*)test2\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            const token = document.cookie.replace(/(?:(?:^|.*;\s*)week2HexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            // console.log(token);
-            axios.defaults.headers.common['Authorization'] = token;
         },
         //確認開啟的modal類別
         openModal(state, product) {
@@ -69,12 +72,12 @@ const app = {
             }
              axios[http](url,{data:this.tempData})//這邊格式比較特別本來，要對照文件給的格式放入data
                 .then(res => {
-                    console.log(res.data);
+                    
                     editProductModal.hide();
                     this.getProductList();
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    alert(error.response.data.message);
                 })
             
         },
@@ -87,13 +90,12 @@ const app = {
         deleteProduct() {
             axios.delete(`${api_url}/api/${api_path}/admin/product/${this.tempData.id}`)
                 .then(res => {
-                    console.log(res.data);
                     deleteProductModal.hide();
                     this.getProductList();
                     alert("刪除成功");
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    alert(error.response.data.message);
                 })
         },
         //上傳圖片API
@@ -112,8 +114,7 @@ const app = {
         
             axios.post(`${api_url}/api/${api_path}/admin/upload`,formData)
               .then((res) => {
-                console.log(res);
-                console.log("上傳圖片網址", res.data.imageUrl);
+                // console.log("上傳圖片網址", res.data.imageUrl);
                 this.uploadImages = res.data.imageUrl;
                 alert("圖片上傳成功");
               })
@@ -126,9 +127,12 @@ const app = {
     mounted() {
         editProductModal = new bootstrap.Modal(document.querySelector("#editProductModal")); //實體化
         deleteProductModal = new bootstrap.Modal(document.querySelector("#deleteProductModal"));//實體化
-        this.checkLogin();
-        this.getProductList();
-        
+
+        //取出Token
+        const token = document.cookie.replace(/(?:(?:^|.*;\s*)week2HexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        axios.defaults.headers.common['Authorization'] = token;
+
+        this.checkAdmin();        
     },
 }
 createApp(app).mount('#app')

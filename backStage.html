@@ -154,11 +154,11 @@
                     <div class="row">
                       <div class="mb-3 col-md-6">
                         <label for="origin_price" class="form-label">原價</label>
-                        <input id="origin_price" type="number" min="0" class="form-control" placeholder="請輸入原價" v-model="tempData.origin_price">
+                        <input id="origin_price" type="number" min="0" class="form-control" placeholder="請輸入原價" v-model.number="tempData.origin_price">
                       </div>
                       <div class="mb-3 col-md-6">
                         <label for="price" class="form-label">售價</label>
-                        <input id="price" type="number" min="0" class="form-control" placeholder="請輸入售價" v-model="tempData.price">
+                        <input id="price" type="number" min="0" class="form-control" placeholder="請輸入售價" v-model.number="tempData.price">
                       </div>
                     </div>
                     <hr>
@@ -212,7 +212,7 @@
               </div>
               <div class="modal-body">
                 是否刪除
-                <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+                <strong class="text-danger" >{{tempData.title}}</strong> 商品(刪除後將無法恢復)。
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
