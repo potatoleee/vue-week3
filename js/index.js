@@ -32,11 +32,12 @@ const app = {
                 // document.cookie = "someCookieName=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
                 document.cookie = `week2HexToken=${token}; expires=${ new Date (expired) };`;
                 //這邊也都要this.才可以取到
+
                 //跳轉至後台頁面
                 location.href = "backStage.html";
             })
             .catch(error => {
-                alert("尚未登入");
+                alert(err.response.data.message);
             })
             }
         },
